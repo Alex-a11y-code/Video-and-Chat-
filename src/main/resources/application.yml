@@ -1,0 +1,47 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/vedio?useUnicode=true&characterEncoding=utf8mb4&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: 1000ms
+          max-idle: 8
+          min-idle: 0
+    rabbitmq:
+      host: 127.0.0.1
+      port: 5672
+      username: guest
+      password: guest
+
+logging:
+  level:
+    root: info
+    org.springframework.web: debug
+    com.example.videoapi.mapper: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+aliyun:
+  oss:
+    endpoint: oss-cn-fuzhou.aliyuncs.com
+    access-key-id: LTAI5tAfKSKmtgyo4v6DUBka
+    access-key-secret: g4qtudlqibYZuF3cHV8TmguTiENQrA
+    bucket-name: a-tools
+    avatar-dir: profilePicture/
+    video-dir: videos/
+    chat-dir: chat/images/
+# 布隆过滤器配置
+bloom-filter:
+  expected-insertions: 1000000  # 期望插入的元素数量
+  fpp: 0.01  # 误判率
