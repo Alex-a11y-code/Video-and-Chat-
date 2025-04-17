@@ -23,10 +23,6 @@ public interface GroupMapper {
     @Delete("DELETE FROM group_member WHERE group_id=#{groupId} AND user_id=#{userId}")
     int removeMember(@Param("groupId") Long groupId, @Param("userId") Long userId);
 
-    //查找群组及相关部分
-    @Select("SELECT * FROM chat_group WHERE id=#{id}")
-    ChatGroup findGroupById(@Param("id") Long id);
-
     @Select("SELECT g.* FROM chat_group g JOIN group_member m ON g.id = m.group_id WHERE m.user_id=#{userId}")
     List<ChatGroup> findGroupsByUserId(@Param("userId") Long userId);
 

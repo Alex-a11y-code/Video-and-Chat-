@@ -16,15 +16,15 @@ public interface MessageMapper {
     int insert(Message msg);
 
     // 查询两位用户之间的私聊记录，按时间顺序排序
-    @Select("SELECT * FROM message WHERE (sender_id=#{u1} AND receiver_id=#{u2}) OR (sender_id=#{u2} AND receiver_id=#{u1}) AND message_type='PRIVATE' ORDER BY timestamp")
+    @Select("SELECT id, sender_id, receiver_id, group_id, content, type, message_type, timestamp, is_read FROM message WHERE ((sender_id=#{u1} AND receiver_id=#{u2}) OR (sender_id=#{u2} AND receiver_id=#{u1})) AND message_type='PRIVATE' ORDER BY timestamp")
     List<Message> findChatHistory(@Param("u1") Long u1, @Param("u2") Long u2);
 
     // 查询指定群组的聊天记录（群聊），按时间顺序排序
-    @Select("SELECT * FROM message WHERE group_id=#{groupId} AND message_type='GROUP' ORDER BY timestamp")
+    @Select("SELECT id, sender_id, receiver_id, group_id, content, type, message_type, timestamp, is_read FROM message WHERE group_id=#{groupId} AND message_type='GROUP' ORDER BY timestamp")
     List<Message> findGroupChatHistory(@Param("groupId") Long groupId);
 
     // 查询广播消息，按时间降序排列
-    @Select("SELECT * FROM message WHERE message_type='BROADCAST' ORDER BY timestamp DESC LIMIT #{limit}")
+    @Select("SELECT id, sender_id, receiver_id, group_id, content, type, message_type, timestamp, is_read FROM message WHERE message_type='BROADCAST' ORDER BY timestamp DESC LIMIT #{limit}")
     List<Message> findBroadcasts(@Param("limit") int limit);
 
     // 统计某用户接收到指定发送者的未读私聊消息数量
@@ -41,7 +41,7 @@ public interface MessageMapper {
 
 
     // 查询指定群组中用户未读的群聊消息
-    @Select("SELECT m.* FROM message m LEFT JOIN message_read_status mrs ON m.id = mrs.message_id AND mrs.user_id = #{userId} WHERE m.group_id = #{groupId} AND m.message_type = 'GROUP' AND (mrs.is_read IS NULL OR mrs.is_read = FALSE) AND m.sender_id != #{userId}")
+    @Select("SELECT m.id, m.sender_id, m.receiver_id, m.group_id, m.content, m.type, m.message_type, m.timestamp, m.is_read FROM message m LEFT JOIN message_read_status mrs ON m.id = mrs.message_id AND mrs.user_id = #{userId} WHERE m.group_id = #{groupId} AND m.message_type = 'GROUP' AND (mrs.is_read IS NULL OR mrs.is_read = FALSE) AND m.sender_id != #{userId}")
     List<Message> findUnreadGroupMessages(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
 }

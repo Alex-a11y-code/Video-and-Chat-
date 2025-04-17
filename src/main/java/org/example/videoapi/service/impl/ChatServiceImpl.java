@@ -115,7 +115,6 @@ public class ChatServiceImpl implements ChatService {
         }
         bloomFilter.put(chatKey);
 
-        // 6. （保留 RabbitMQ 推送给其他消费者或审计）
         rabbit.convertAndSend(
                 RabbitMQConfig.EXCHANGE,
                 RabbitMQConfig.ROUTING_KEY,
